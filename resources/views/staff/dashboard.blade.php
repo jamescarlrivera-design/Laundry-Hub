@@ -95,15 +95,19 @@
         </div>
 
         {{-- Dashboard Statistics --}}
+        
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-
+        
             {{-- Pending Requests --}}
             <div class="bg-white border rounded-xl shadow-sm p-6">
+                
+                
+                
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm text-gray-500">Pending Requests</p>
                         <h2 class="text-3xl font-bold text-yellow-600 mt-2">
-                            {{ $pendingRequests ?? 0 }}
+                            {{ $totalRequests ?? 0 }}
                         </h2>
                     </div>
 
@@ -117,7 +121,7 @@
                     </div>
                 </div>
             </div>
-
+           
             {{-- Processing Requests --}}
             <div class="bg-white border rounded-xl shadow-sm p-6">
                 <div class="flex items-center justify-between">

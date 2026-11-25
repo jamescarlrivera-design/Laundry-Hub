@@ -202,12 +202,14 @@
                                         <option value="">Choose a service</option>
 
                                         @foreach($services as $service)
+                                         @if($service->service_name !== 'Pickup')
                                             <option value="{{ $service->id }}"
                                                     data-price="{{ $service->pivot->price }}"
                                                     data-unit="{{ $service->pivot->unit }}">
                                                 {{ $service->service_name }}
                                                 - ₱{{ number_format($service->pivot->price, 2) }}/{{ $service->pivot->unit }}
                                             </option>
+                                             @endif
                                         @endforeach
 
                                     </select>

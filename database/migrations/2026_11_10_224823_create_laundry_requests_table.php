@@ -10,6 +10,8 @@ return new class extends Migration {
         Schema::create('requests', function (Blueprint $table) {
             $table->id();
 
+            
+
             // Customer who created the request
             $table->foreignId('customer_id')
                 ->constrained('users')
@@ -34,6 +36,9 @@ return new class extends Migration {
               ->nullable()
               ->constrained('pickup_information')
               ->nullOnDelete();
+            $table->enum('fulfillment_type', ['pickup', 'walk_in'])
+            ->default('walk_in');
+            $table->decimal('fulfillment_fee', 10, 2)->default(0);
             $table->text('notes')->nullable();
         
             $table->timestamps();

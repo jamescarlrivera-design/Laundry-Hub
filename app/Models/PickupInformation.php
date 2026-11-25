@@ -23,4 +23,10 @@ class PickupInformation extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+
+    public function laundryRequests()
+{
+    return $this->hasMany(LaundryRequest::class, 'pickup_information_id');
+}
 }

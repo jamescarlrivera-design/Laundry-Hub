@@ -1,47 +1,61 @@
 <?php
 
 namespace Database\Factories;
+
 use App\Models\User;
 use App\Models\LaundryRequest;
-use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\PickupInformation;
 use App\Models\Branch;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends Factory<LaundryRequest>
  */
 class LaundryRequestFactory extends Factory
 {
+    protected $model = LaundryRequest::class;
 
-     protected $model = LaundryRequest::class;
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
-
-    
     public function definition(): array
     {
-        return [
-            'customer_id' => User::factory()->create([
+        // Randomly choose pickup or walk-in
+        $fulfillmentType = fake()->randomElement([
+            'pickup',
+            'walk_in',
+        ]);
+
+        // Set fee depending on fulfillment type
+        $fulfillmentFee = $fulfillmentType === 'pickup' ? 50 : 0;
+
+        // Create a customer
+        $customer = User::factory()->create([
             'role' => 'customer',
-        ])->id,
+        ]);
 
+        return [
+            'customer_id' => $customer->id,
 
-        'branch_id' => Branch::inRandomOrder()->first()?->id,
+            'branch_id' => Branch::inRandomOrder()->first()?->id,
 
-        'total_amount' => fake()->randomFloat(2, 100, 2000),
+            'pickup_information_id' => $fulfillmentType === 'pickup'
+                ? PickupInformation::factory()
+                : null,
 
-        'status' => fake()->randomElement([
-            'pending',
-            'approved',
-            'processing',
-            'completed',
-            'cancelled',
-        ]),
+            'fulfillment_type' => $fulfillmentType,
 
-        'pickup_information_id' => null,
-        'notes' => fake()->randomElement([
+            'fulfillment_fee' => $fulfillmentFee,
+
+            'total_amount' => fake()->randomFloat(2, 100, 2000)
+                + $fulfillmentFee,
+
+            'status' => fake()->randomElement([
+                'pending',
+                'approved',
+                'processing',
+                'completed',
+                'cancelled',
+            ]),
+
+            'notes' => fake()->randomElement([
                 'Please separate white clothes from colored clothes.',
                 'Handle delicate clothes with care.',
                 'Please do not use strong detergent.',

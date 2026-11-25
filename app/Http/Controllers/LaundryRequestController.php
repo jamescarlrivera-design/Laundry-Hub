@@ -44,7 +44,8 @@ class LaundryRequestController extends Controller
             'customer',
             'branch',
             'items.service',
-            'pickupInformation'
+            'pickupInformation',
+            
     
         ]);
 
@@ -65,6 +66,51 @@ class LaundryRequestController extends Controller
         return redirect()
             ->route('staff.requests.index')
             ->with('success', 'Request status updated successfully.');
+    }
+
+
+    public function staffdashboard(){
+
+     
+            $branchIds = auth()->user()
+            ->branch()
+            ->pluck('branches.id');
+
+        //Get requests assigned branches
+        $requests = LaundryRequest::whereIn('branch_id', $branchIds);
+
+        $pendingRequests = (clone $requests)
+        ->where('status', 'pending')
+        ->count();
+
+        $processingRequests = (clone $requests)
+        ->where('status', 'processing')
+        ->count();
+        
+        $completedRequests = (clone $requests)
+        ->where('status', 'completed')
+        ->count();
+
+        $totalRequests = (clone $requests)
+        ->where('status', '!=', 'completed')
+        ->count();
+
+         $statuses = $requests->with([
+        'customer',
+        'branch',
+        'items.service',
+        'pickupInformation'
+    ])->latest()->get();
+
+    return view('staff.dashboard', compact(
+        'statuses',
+        'pendingRequests',
+        'totalRequests',
+        'processingRequests',
+        'completedRequests'
+    ));
+
+
     }
 
 
@@ -125,11 +171,7 @@ class LaundryRequestController extends Controller
                 'branch_id' => $branch->id,
                 'fulfillment_type' => $fulfillmentType,
                 'fulfillment_fee' => $fulfillmentFee,
-                'pickup_address' => $validated['fulfillment_type'] === 'pickup'
-                    ? auth()->user()->address
-                    : null,
-                'pickup_contact_number' => auth()->user()->contact_number,
-
+                'pickup_information_id' => $validated['pickup_information_id'] ?? null,
                 'status' => 'pending',
                 'notes' => $validated['notes'] ?? null,
             ]);
@@ -190,6 +232,7 @@ class LaundryRequestController extends Controller
 
         $services = $branch->services()
             ->wherePivot('is_active', true)
+            ->where('service_name', '!=', 'Pickup')
             ->get();
 
         $selectedService = $request->query('service_id');

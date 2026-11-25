@@ -21,13 +21,6 @@ return new class extends Migration
                   ->constrained('services')
                   ->restrictOnDelete();
 
-            $table->enum('request_method', [
-            'walk_in',
-            'pickup'
-             ])->default('walk_in');
-
-            $table->decimal('pickup_fee', 10, 2)->default(0);
-
             // Amount of the selected service
             $table->decimal('quantity', 10, 2);
 

@@ -16,9 +16,14 @@ class LaundryRequest extends Model
 
     protected $fillable = [
         'customer_id',
+        'pickup_information_id',
+        'fulfillment_type',
+        'fullfillment_fee',
         'branch_id',
         'total_amount',
         'status',
+        'notes',
+
     ];
 
     // One request belongs to one customer
@@ -47,7 +52,11 @@ class LaundryRequest extends Model
 
     public function pickupInformation()
 {
-    return $this->belongsTo(PickupInformation::class);
+    return $this->belongsTo(PickupInformation::class, 'pickup_information_id');
 }
+
+
+
+
 
 }

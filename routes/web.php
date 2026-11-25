@@ -39,10 +39,9 @@ Route::middleware(['auth', 'role:staff'])
     ->name('staff.')
     ->group(function () {
 
-        Route::get('/dashboard', function () {
-            return view('staff.dashboard');
-        })->name('dashboard');
-
+        Route::get('/dashboard', [LaundryRequestController::class, 'staffdashboard'])
+            ->name('staff.dashboard');
+ 
         Route::patch(
             '/requests/{laundryRequest}/status',
             [LaundryRequestController::class, 'staffupdate']

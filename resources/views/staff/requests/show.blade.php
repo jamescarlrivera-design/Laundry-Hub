@@ -59,6 +59,7 @@
 
         {{-- Contact Number --}}
         <div>
+
             <p class="text-sm text-gray-500">Contact Number</p>
             <p class="font-medium text-gray-800">
                 {{ $request->pickupInformation->contact_number ?? 'Not provided' }}
@@ -243,7 +244,7 @@
         </span>
     </div>
 
-    {{-- Fulfillment Method --}}
+    {{-- Fulfillment Method 
     <div class="flex justify-between items-center mb-3">
         <span class="text-gray-600">
             Fulfillment Method
@@ -255,7 +256,7 @@
         </span>
     </div>
 
-    {{-- Pickup Fee --}}
+    {{-- Pickup Fee 
     <div class="flex justify-between items-center mb-4">
         <span class="text-gray-600">
             {{ $request->fulfillment_type === 'pickup' ? 'Pickup Fee' : 'Fulfillment Fee' }}
@@ -264,7 +265,8 @@
         <span class="font-medium {{ $pickupFee > 0 ? 'text-blue-600' : 'text-green-600' }}">
             {{ $pickupFee > 0 ? '+' : '' }}₱{{ number_format($pickupFee, 2) }}
         </span>
-    </div>
+    </div> 
+    
 
     {{-- Grand Total --}}
     <div class="border-t border-gray-300 pt-4 flex justify-between items-center">
